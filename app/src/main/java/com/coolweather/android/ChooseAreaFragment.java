@@ -2,6 +2,7 @@ package com.coolweather.android;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,6 +114,12 @@ public class ChooseAreaFragment extends Fragment {
                             } else if (currentLevel == LEVEL_CITY) {
                                 selectedCity = cityList.get(position);
                                 queryCounties();
+                            } else if (currentLevel == LEVEL_COUNTY) {
+                                String weatherId = countyList.get(position).getWeatherId();
+                                Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                                intent.putExtra("weather_id", weatherId);
+                                startActivity(intent);
+                                getActivity().finish();
                             }
                         }
                     });
@@ -137,44 +144,6 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
 
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        //在onActivityCreated()方法中给ListView和Button设置了点击事件
-//        super.onActivityCreated(savedInstanceState);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            /**
-//             * 当你点击了某个省的时候会进入到ListView的onItemClick()方法中，
-//             * 这个时候会根据当前的级别来判断是去调用queryCities()方法还是queryCounties()方法，
-//             * queryCities()方法是去查询市级数据，而queryCounties()方法是去查询县级数据，
-//             * 这两个方法内部的流程和queryProvinces()方法基本相同
-//             */
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (currentLevel == LEVEL_PROVINCE) {
-//                    selectedProvince = provinceList.get(position);
-//                    queryCities();
-//                } else if (currentLevel == LEVEL_CITY) {
-//                    selectedCity = cityList.get(position);
-//                    queryCounties();
-//                }
-//            }
-//        });
-//        /**
-//         * 在返回按钮的点击事件里，会对当前ListView的列表级别进行判断。
-//         * 如果当前是县级列表，那么就返回到市级列表，
-//         * 如果当前是市级列表，那么就返回到省级表列表。
-//         * 当返回到省级列表时，返回按钮会自动隐藏，从而也就不需要再做进一步的处理了。
-//         */
-//        backButton.setOnClickListener(view -> {
-//            if (currentLevel == LEVEL_COUNTY) {
-//                queryCities();
-//            } else if (currentLevel == LEVEL_CITY) {
-//                queryProvince();
-//            }
-//        });
-//        //调用了queryProvinces()方法，也就是从这里开始加载省级数据的。
-//        queryProvince();
-//    }
 
     /**
      * 查询全国所有的省，优先从数据库查询，如果没有查询到再去服务器查询
